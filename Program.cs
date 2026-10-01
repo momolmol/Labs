@@ -1,5 +1,3 @@
-﻿
-
 class Tasks
 {
     public int sumLastNums(int x)
@@ -203,14 +201,20 @@ class Tasks
         {
             if (count == 0)
             {
-                Console.WriteLine("Задание 3_10. Игра Угадайка. Введите число: ");
+                Console.Write("Задание 3_10. Игра Угадайка. Введите число от 0 до 9: ");
             }
             else
             {
-                Console.WriteLine("Вы не угадали, введите число от 0 до 9: ");
+                Console.Write("Вы не угадали, введите число от 0 до 9: ");
             }
 
-            x = Convert.ToInt32(Console.ReadLine());
+            string input = Console.ReadLine();
+            if (!int.TryParse(input, out x))
+            {
+                Console.WriteLine("Введено не число. Попробуйте ещё раз.");
+                continue;
+            }
+
             count++;
 
         } while (x != num);
@@ -251,28 +255,31 @@ class Tasks
         return result;
     }
 
-    public int[] add (int[] arr, int x, int pos)
+    public int[] add(int[] arr, int x, int pos)
     {
         int[] arr2 = new int[arr.Length + 1];
-        for (int i = 0; i < arr2.Length; i++ )
+        for (int i = 0; i < arr2.Length; i++)
         {
             if (i < pos)
             {
                 arr2[i] = arr[i];
-            } else if (i == pos)
+            }
+            else if (i == pos)
             {
                 arr2[i] = x;
-            } else {
-                arr2[i] = arr[i-1];
+            }
+            else
+            {
+                arr2[i] = arr[i - 1];
             }
         }
         return arr2;
     }
 
-    public void reverse (int[] arr)
+    public void reverse(int[] arr)
     {
         int i = 0;
-        int j = arr.Length -1;
+        int j = arr.Length - 1;
 
         while (i < j)
         {
@@ -280,25 +287,26 @@ class Tasks
             arr[i] = arr[j];
             arr[j] = temp;
 
-            i++; j--;
+            i++;
+            j--;
         }
     }
 
-    public int[] concat (int[] arr1,int[] arr2)
+    public int[] concat(int[] arr1, int[] arr2)
     {
         int[] arr3 = new int[arr1.Length + arr2.Length];
         for (int i = 0; i < arr1.Length; i++)
         {
             arr3[i] = arr1[i];
         }
-        for (int i = 0; i < arr2.Length; i ++)
+        for (int i = 0; i < arr2.Length; i++)
         {
             arr3[arr1.Length + i] = arr2[i];
         }
         return arr3;
     }
 
-    public int[] deleteNegative (int[] arr)
+    public int[] deleteNegative(int[] arr)
     {
         int count = 0;
         for (int i = 0; i < arr.Length; i++)
@@ -308,7 +316,7 @@ class Tasks
                 count++;
             }
         }
-        int [] arr2 = new int[count];
+        int[] arr2 = new int[count];
         int j = 0;
         for (int i = 0; i < arr.Length; i++)
         {
@@ -319,8 +327,7 @@ class Tasks
             }
         }
         return arr2;
-    } 
-
+    }
 }
 
 class Program
@@ -359,49 +366,114 @@ class Program
             case 34: p.RunTask4_4(t);  break;
             case 36: p.RunTask4_6(t);  break;
             case 38: p.RunTask4_8(t);  break;
-            case 40: p.RunTask4_10(t);  break;
+            case 40: p.RunTask4_10(t); break;
             default:
                 Console.WriteLine("Такой задачи нет.");
                 break;
         }
     }
 
+    private bool TryReadInt(string prompt, out int value)
+    {
+        Console.Write(prompt);
+        string input = Console.ReadLine();
+        return int.TryParse(input, out value);
+    }
+
+    private bool TryReadChar(string prompt, out char value)
+    {
+        Console.Write(prompt);
+        string input = Console.ReadLine();
+        return char.TryParse(input, out value);
+    }
+
+    private bool TryReadIntArray(string prompt, out int[] arr)
+    {
+        arr = null;
+        Console.Write(prompt);
+        string input = Console.ReadLine();
+
+        string[] parts = input.Split(' ');
+        int[] result = new int[parts.Length];
+
+        for (int i = 0; i < parts.Length; i++)
+        {
+            if (!int.TryParse(parts[i], out result[i]))
+            {
+                return false;
+            }
+        }
+
+        arr = result;
+        return true;
+    }
+
+    private void PrintIntArray(int[] arr)
+    {
+        for (int i = 0; i < arr.Length; i++)
+        {
+            Console.Write(arr[i] + " ");
+        }
+        Console.WriteLine();
+    }
+
     private void RunTask1_2(Tasks t)
     {
-        Console.Write("Задание 1_2. Введите число: ");
-        int x = Convert.ToInt32(Console.ReadLine());
+        if (!TryReadInt("Задание 1_2. Введите число: ", out int x))
+        {
+            Console.WriteLine("Введено не число");
+            return;
+        }
         Console.WriteLine($"Сумма: {t.sumLastNums(x)}");
     }
 
     private void RunTask1_4(Tasks t)
     {
-        Console.Write("Задание 1_4. Введите число: ");
-        int x = Convert.ToInt32(Console.ReadLine());
+        if (!TryReadInt("Задание 1_4. Введите число: ", out int x))
+        {
+            Console.WriteLine("Введено не число");
+            return;
+        }
         Console.WriteLine($"Число положительное? {t.isPositive(x)}");
     }
 
     private void RunTask1_6(Tasks t)
     {
-        Console.Write("Задание 1_6. Введите символ: ");
-        char x = Convert.ToChar(Console.ReadLine());
+        if (!TryReadChar("Задание 1_6. Введите символ: ", out char x))
+        {
+            Console.WriteLine("Введён не один символ");
+            return;
+        }
         Console.WriteLine($"Большая буква? {t.isUpperCase(x)}");
     }
 
     private void RunTask1_8(Tasks t)
     {
-        Console.Write("Задание 1_8. Введите a: ");
-        int a = Convert.ToInt32(Console.ReadLine());
-        Console.Write("Введите b: ");
-        int b = Convert.ToInt32(Console.ReadLine());
+        if (!TryReadInt("Задание 1_8. Введите a: ", out int a))
+        {
+            Console.WriteLine("Введено не число");
+            return;
+        }
+        if (!TryReadInt("Введите b: ", out int b))
+        {
+            Console.WriteLine("Введено не число");
+            return;
+        }
         Console.WriteLine($"Делит нацело? {t.isDivisor(a, b)}");
     }
 
     private void RunTask1_10(Tasks t)
     {
-        Console.Write("Задание 1_10. Введите a: ");
-        int a = Convert.ToInt32(Console.ReadLine());
-        Console.Write("Введите b: ");
-        int b = Convert.ToInt32(Console.ReadLine());
+        if (!TryReadInt("Задание 1_10. Введите a: ", out int a))
+        {
+            Console.WriteLine("Введено не число");
+            return;
+        }
+        if (!TryReadInt("Введите b: ", out int b))
+        {
+            Console.WriteLine("Введено не число");
+            return;
+        }
 
         int result = t.lastNumSum(a, b);
         result = t.lastNumSum(result, 123);
@@ -412,37 +484,61 @@ class Program
 
     private void RunTask2_2(Tasks t)
     {
-        Console.Write("Задание 2_2. Введите x: ");
-        int x = Convert.ToInt32(Console.ReadLine());
-        Console.Write("Введите y: ");
-        int y = Convert.ToInt32(Console.ReadLine());
+        if (!TryReadInt("Задание 2_2. Введите x: ", out int x))
+        {
+            Console.WriteLine("Введено не число");
+            return;
+        }
+        if (!TryReadInt("Введите y: ", out int y))
+        {
+            Console.WriteLine("Введено не число");
+            return;
+        }
         Console.WriteLine($"Результат: {t.safeDiv(x, y)}");
     }
 
     private void RunTask2_4(Tasks t)
     {
-        Console.Write("Задание 2_4. Введите x: ");
-        int x = Convert.ToInt32(Console.ReadLine());
-        Console.Write("Введите y: ");
-        int y = Convert.ToInt32(Console.ReadLine());
+        if (!TryReadInt("Задание 2_4. Введите x: ", out int x))
+        {
+            Console.WriteLine("Введено не число");
+            return;
+        }
+        if (!TryReadInt("Введите y: ", out int y))
+        {
+            Console.WriteLine("Введено не число");
+            return;
+        }
         Console.WriteLine($"Результат: {t.makeDecision(x, y)}");
     }
 
     private void RunTask2_6(Tasks t)
     {
-        Console.Write("Задание 2_6. Введите x: ");
-        int x = Convert.ToInt32(Console.ReadLine());
-        Console.Write("Введите y: ");
-        int y = Convert.ToInt32(Console.ReadLine());
-        Console.Write("Введите z: ");
-        int z = Convert.ToInt32(Console.ReadLine());
+        if (!TryReadInt("Задание 2_6. Введите x: ", out int x))
+        {
+            Console.WriteLine("Введено не число");
+            return;
+        }
+        if (!TryReadInt("Введите y: ", out int y))
+        {
+            Console.WriteLine("Введено не число");
+            return;
+        }
+        if (!TryReadInt("Введите z: ", out int z))
+        {
+            Console.WriteLine("Введено не число");
+            return;
+        }
         Console.WriteLine($"Результат: {t.sum3(x, y, z)}");
     }
 
     private void RunTask2_8(Tasks t)
     {
-        Console.Write("Задание 2_8. Введите возраст: ");
-        int x = Convert.ToInt32(Console.ReadLine());
+        if (!TryReadInt("Задание 2_8. Введите возраст: ", out int x))
+        {
+            Console.WriteLine("Введено не число");
+            return;
+        }
         Console.WriteLine($"Результат: {t.age(x)}");
     }
 
@@ -456,31 +552,46 @@ class Program
 
     private void RunTask3_2(Tasks t)
     {
-        Console.Write("Задание 3_2. Введите x: ");
-        int x = Convert.ToInt32(Console.ReadLine());
+        if (!TryReadInt("Задание 3_2. Введите x: ", out int x))
+        {
+            Console.WriteLine("Введено не число");
+            return;
+        }
         Console.WriteLine($"Результат: {t.reverseListNums(x)}");
     }
 
     private void RunTask3_4(Tasks t)
     {
-        Console.Write("Задание 3_4. Введите x: ");
-        int x = Convert.ToInt32(Console.ReadLine());
-        Console.Write("Введите y: ");
-        int y = Convert.ToInt32(Console.ReadLine());
+        if (!TryReadInt("Задание 3_4. Введите x: ", out int x))
+        {
+            Console.WriteLine("Введено не число");
+            return;
+        }
+        if (!TryReadInt("Введите y: ", out int y))
+        {
+            Console.WriteLine("Введено не число");
+            return;
+        }
         Console.WriteLine($"Результат: {t.pow(x, y)}");
     }
 
     private void RunTask3_6(Tasks t)
     {
-        Console.Write("Задание 3_6. Введите x: ");
-        int x = Convert.ToInt32(Console.ReadLine());
+        if (!TryReadInt("Задание 3_6. Введите x: ", out int x))
+        {
+            Console.WriteLine("Введено не число");
+            return;
+        }
         Console.WriteLine($"Результат: {t.equalNum(x)}");
     }
 
     private void RunTask3_8(Tasks t)
     {
-        Console.Write("Задание 3_8. Введите x: ");
-        int x = Convert.ToInt32(Console.ReadLine());
+        if (!TryReadInt("Задание 3_8. Введите x: ", out int x))
+        {
+            Console.WriteLine("Введено не число");
+            return;
+        }
         Console.WriteLine("Результат: ");
         t.leftTriangle(x);
     }
@@ -492,112 +603,94 @@ class Program
 
     private void RunTask4_2(Tasks t)
     {
-        Console.Write("Задание 4_2. Введите массив через пробел: ");
-        string[] parts = Console.ReadLine().Split(' ');
-        int[] arr = new int[parts.Length];
-        for (int i = 0; i < parts.Length; i++)
+        if (!TryReadIntArray("Задание 4_2. Введите массив через пробел: ", out int[] arr))
         {
-            arr[i] = Convert.ToInt32(parts[i]);
+            Console.WriteLine("Введено не число");
+            return;
         }
-
-        Console.Write("Введите число для поиска x: ");
-        int x = Convert.ToInt32(Console.ReadLine());
+        if (!TryReadInt("Введите число для поиска x: ", out int x))
+        {
+            Console.WriteLine("Введено не число");
+            return;
+        }
 
         int index = t.findLast(arr, x);
         Console.WriteLine($"Индекс последнего вхождения: {index}");
     }
+
     private void RunTask4_4(Tasks t)
     {
-        Console.Write("Задание 4_4. Введите массив через пробел: ");
-        string[] parts = Console.ReadLine().Split(' ');
-        int[] arr = new int[parts.Length];
-        for (int i = 0; i < parts.Length; i++)
+        if (!TryReadIntArray("Задание 4_4. Введите массив через пробел: ", out int[] arr))
         {
-            arr[i] = Convert.ToInt32(parts[i]);
+            Console.WriteLine("Введено не число");
+            return;
         }
-
-        Console.Write("Введите число для вставки x: ");
-        int x = Convert.ToInt32(Console.ReadLine());
-
-        Console.Write("Введите позицию pos: ");
-        int pos = Convert.ToInt32(Console.ReadLine());
+        if (!TryReadInt("Введите число для вставки x: ", out int x))
+        {
+            Console.WriteLine("Введено не число");
+            return;
+        }
+        if (!TryReadInt("Введите позицию pos: ", out int pos))
+        {
+            Console.WriteLine("Введено не число");
+            return;
+        }
+        if (pos < 0 || pos > arr.Length)
+        {
+            Console.WriteLine("Позиция вне диапазона массива");
+            return;
+        }
 
         int[] result = t.add(arr, x, pos);
 
         Console.Write("Результат: ");
-        for (int i = 0; i < result.Length; i++)
-        {
-            Console.Write(result[i] + " ");
-        }
-        Console.WriteLine();
+        PrintIntArray(result);
     }
 
     private void RunTask4_6(Tasks t)
     {
-        Console.Write("Задание 4_6. Введите массив через пробел: ");
-        string[] parts = Console.ReadLine().Split(' ');
-        int[] arr = new int[parts.Length];
-        for (int i = 0; i < parts.Length; i++)
+        if (!TryReadIntArray("Задание 4_6. Введите массив через пробел: ", out int[] arr))
         {
-            arr[i] = Convert.ToInt32(parts[i]);
+            Console.WriteLine("Введено не число");
+            return;
         }
 
         t.reverse(arr);
 
         Console.Write("Результат: ");
-        for (int i = 0; i < arr.Length; i++)
-        {
-            Console.Write(arr[i] + " ");
-        }
-        Console.WriteLine();
+        PrintIntArray(arr);
     }
+
     private void RunTask4_8(Tasks t)
     {
-        Console.Write("Введите первый массив через пробел: ");
-        string[] parts1 = Console.ReadLine().Split(' ');
-        int[] arr1 = new int[parts1.Length];
-        for (int i = 0; i < parts1.Length; i++)
+        if (!TryReadIntArray("Введите первый массив через пробел: ", out int[] arr1))
         {
-            arr1[i] = Convert.ToInt32(parts1[i]);
+            Console.WriteLine("Введено не число");
+            return;
         }
-
-        Console.Write("Введите второй массив через пробел: ");
-        string[] parts2 = Console.ReadLine().Split(' ');
-        int[] arr2 = new int[parts2.Length];
-        for (int i = 0; i < parts2.Length; i++)
+        if (!TryReadIntArray("Введите второй массив через пробел: ", out int[] arr2))
         {
-            arr2[i] = Convert.ToInt32(parts2[i]);
+            Console.WriteLine("Введено не число");
+            return;
         }
 
         int[] result = t.concat(arr1, arr2);
 
         Console.Write("Результат: ");
-        for (int i = 0; i < result.Length; i++)
-        {
-            Console.Write(result[i] + " ");
-        }
-        Console.WriteLine();
+        PrintIntArray(result);
     }
+
     private void RunTask4_10(Tasks t)
     {
-        Console.Write("Задание 4_10. Введите массив через пробел: ");
-        string[] parts = Console.ReadLine().Split(' ');
-        int[] arr = new int[parts.Length];
-        for (int i = 0; i < parts.Length; i++)
+        if (!TryReadIntArray("Задание 4_10. Введите массив через пробел: ", out int[] arr))
         {
-            arr[i] = Convert.ToInt32(parts[i]);
+            Console.WriteLine("Введено не число");
+            return;
         }
 
         int[] result = t.deleteNegative(arr);
 
         Console.Write("Результат: ");
-        for (int i = 0; i < result.Length; i++)
-        {
-            Console.Write(result[i] + " ");
-        }
-        Console.WriteLine();
+        PrintIntArray(result);
     }
-        
 }
-
-// https://github.com/momolmol/Labs.git
